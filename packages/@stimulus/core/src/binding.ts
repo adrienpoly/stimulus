@@ -44,7 +44,7 @@ export class Binding {
 
   private invokeWithEvent(event: Event) {
     try {
-      this.method.call(this.controller, event)
+      this.method.call(this.controller, event, { ...this.dataAttributes(event) })
     } catch (error) {
       const { identifier, controller, element, index } = this
       const detail = { identifier, controller, element, index, event }
@@ -60,6 +60,14 @@ export class Binding {
       return this.scope.containsElement(eventTarget)
     } else {
       return true
+    }
+  }
+
+  private dataAttributes(event: Event): object {
+    if (event.currentTarget instanceof HTMLElement) {
+      return event.currentTarget.dataset
+    } else {
+      return {}
     }
   }
 
